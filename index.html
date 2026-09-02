@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Camera Iperbarica · Urgenze OTI</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Iperbarica">
+<style>
+  :root{
+    --ocean:#0c5c8a; --ocean-light:#e5f1f8;
+    --coral:#b3541e; --coral-light:#fbeee1;
+    --ink:#1e2430; --sub:#5b6472; --line:#e2e6ec; --bg:#f6f7f9; --card:#ffffff;
+    --ok:#0d9488; --warn:#b45309;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased;}
+  header{position:sticky; top:0; z-index:20; background:linear-gradient(135deg,#073a56,#0c5c8a); color:#fff; padding:16px 16px 0; box-shadow:0 2px 10px rgba(0,0,0,.12);}
+  header h1{margin:0 0 2px; font-size:1.15rem; font-weight:700;}
+  header p{margin:0 0 12px; font-size:.78rem; opacity:.85;}
+  .tabs{display:flex; gap:6px; flex-wrap:wrap;}
+  .tab{flex:1; min-width:130px; text-align:center; padding:10px 6px; border-radius:10px 10px 0 0; background:rgba(255,255,255,.12); font-size:.86rem; font-weight:600; cursor:pointer; user-select:none; transition:background .15s;}
+  .tab.active{background:var(--bg); color:var(--ink);}
+  .tab .sub{display:block; font-weight:400; font-size:.66rem; opacity:.75;}
+  main{max-width:900px; margin:0 auto; padding:14px 12px 90px;}
+  .section{display:none;}
+  .section.active{display:block;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:14px; overflow:hidden; box-shadow:0 1px 2px rgba(20,30,50,.04);}
+  .card-head{padding:13px 16px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; border-left:4px solid var(--ocean);}
+  .card-head h2{margin:0; font-size:.96rem; font-weight:700; line-height:1.3;}
+  .chevron{font-size:.8rem; color:var(--sub); transition:transform .2s; flex-shrink:0;}
+  .card.open .chevron{transform:rotate(180deg);}
+  .card-body{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .card.open .card-body{max-height:none;}
+  .card-body-inner{padding:0 16px 16px;}
+  h3.sub-h{font-size:.82rem; font-weight:700; margin:14px 0 6px; color:var(--ink);}
+  h3.sub-h:first-child{margin-top:0;}
+  table{width:100%; border-collapse:collapse; font-size:.78rem; margin-bottom:4px;}
+  th,td{border:1px solid var(--line); padding:6px 7px; text-align:left; vertical-align:top;}
+  th{background:var(--ocean-light); font-weight:700; font-size:.7rem; text-transform:uppercase; letter-spacing:.02em; color:var(--sub);}
+  td.num{white-space:nowrap;}
+  .note{font-size:.74rem; color:var(--sub); margin:6px 0 0; line-height:1.5;}
+  .note.warn{color:var(--warn); font-weight:600;}
+  .note.danger{color:#b91c1c; font-weight:700;}
+  .tbl-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .source{font-size:.68rem; color:var(--sub); opacity:.85; margin-top:8px; padding-top:8px; border-top:1px dashed var(--line);}
+  .drug{font-weight:600;}
+  .badge{display:inline-block; background:var(--ocean-light); color:var(--ocean); font-size:.72rem; font-weight:700; padding:4px 9px; border-radius:20px; margin:2px 4px 2px 0;}
+  .badge.urgent{background:var(--coral-light); color:var(--coral);}
+  ul.checklist{margin:6px 0; padding-left:20px; font-size:.85rem; line-height:1.8;}
+  ul.checklist li{margin-bottom:2px;}
+  .chk-group{background:#f8fafc; border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-top:6px;}
+  label.chk{display:flex; align-items:flex-start; gap:9px; padding:5px 0; font-size:.85rem; cursor:pointer; line-height:1.4;}
+  label.chk input{margin-top:3px; width:17px; height:17px; flex-shrink:0; accent-color:var(--ocean);}
+  .calc-out{background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-top:12px; font-size:.85rem;}
+  .calc-out .big{font-size:1.15rem; font-weight:700; margin-bottom:4px;}
+  .calc-out.sev-none{color:var(--sub);}
+  .calc-out.sev-lieve{border-color:#a7d8cd;} .calc-out.sev-lieve .big{color:var(--ok);}
+  .calc-out.sev-moderata{border-color:#f0d199;} .calc-out.sev-moderata .big{color:var(--warn);}
+  .calc-out.sev-severa{border-color:#f3b3ac;} .calc-out.sev-severa .big{color:#b91c1c;}
+  footer{max-width:900px; margin:0 auto; padding:6px 14px 30px; font-size:.72rem; color:var(--sub); line-height:1.6;}
+  footer strong{color:var(--ink);}
+  @media print{
+    header{position:static;}
+    .card-body{max-height:none !important;}
+    .card{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Camera Iperbarica · Consulenza urgenze OTI</h1>
+  <p>Percorso dal Pronto Soccorso all'indicazione al trattamento iperbarico — intossicazione da CO, malattia da decompressione ed emergenze OTI</p>
+  <div class="tabs">
+    <div class="tab active" data-target="indicazioni">Indicazioni<span class="sub">e controindicazioni</span></div>
+    <div class="tab" data-target="esame">Esame clinico<span class="sub">segni e sintomi</span></div>
+    <div class="tab" data-target="strumentali">Esami pre-OTI<span class="sub">workup strumentale</span></div>
+    <div class="tab" data-target="tabelle">Tabelle terapeutiche<span class="sub">US Navy · protocolli</span></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ==================== INDICAZIONI E CONTROINDICAZIONI ==================== -->
+  <section id="indicazioni" class="section active">
+
+    <div class="card open">
+      <div class="card-head"><h2>Indicazioni urgenti/emergenti alla OTI</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Condizioni in cui il ritardo del trattamento peggiora significativamente la prognosi: da valutare in consulenza urgente dal Pronto Soccorso.</p>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Condizione</th><th>Perché è urgente</th></tr></thead>
+          <tbody>
+            <tr><td><span class="drug">Intossicazione acuta da monossido di carbonio</span> (con criteri di gravità)</td><td>Il beneficio è massimo quanto più precoce è il trattamento; riduce mortalità e sequele neurocognitive tardive</td></tr>
+            <tr><td><span class="drug">Malattia da decompressione</span> (MDD tipo I e II)</td><td>Recompressione precoce accelera la risoluzione delle bolle di azoto; ritardo &gt;12h riduce il successo dal 75% al 57%</td></tr>
+            <tr><td><span class="drug">Embolia gassosa arteriosa</span> (AGE)</td><td>Emergenza tempo-dipendente: bolle d'aria in circolo arterioso, spesso post-risalita rapida o barotrauma polmonare</td></tr>
+            <tr><td><span class="drug">Gangrena gassosa</span> / infezioni necrotizzanti dei tessuti molli da anaerobi produttori di gas</td><td>L'OTI inibisce la produzione di tossine clostridiali ed è adiuvante al debridement chirurgico</td></tr>
+            <tr><td><span class="drug">Sindrome compartimentale / crush injury</span> con tessuto a rischio</td><td>Riduce edema ed ischemia tissutale; indicata se applicata entro 4–6h dalla lesione</td></tr>
+            <tr><td><span class="drug">Lembi/innesti cutanei a rischio</span> di necrosi</td><td>Finestra terapeutica ristretta per salvare il tessuto ipoperfuso</td></tr>
+            <tr><td><span class="drug">Occlusione dell'arteria centrale della retina</span></td><td>Finestra terapeutica breve (idealmente entro 6–8h) per tentare il salvataggio visivo</td></tr>
+            <tr><td><span class="drug">Ipoacusia improvvisa neurosensoriale</span></td><td>Beneficio maggiore se iniziata entro 2 settimane dall'esordio (adiuvante alla terapia steroidea)</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note">Altre indicazioni UHMS approvate ma tipicamente non urgenti (elettive, valutazione ambulatoriale): ferite problematiche/piede diabetico, osteomielite refrattaria, lesioni da radiazioni tardive, anemia grave in cui la trasfusione non è possibile, osteonecrosi avascolare, ustioni termiche selezionate, avvelenamento da cianuro in associazione (controverso).</p>
+        <p class="source">Fonte: Huang ET (ed.). UHMS Hyperbaric Medicine Indications Manual, 15ª edizione, 2023.</p>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Controindicazioni</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <h3 class="sub-h">Assoluta</h3>
+        <p class="note danger">Pneumotorace non trattato — unica controindicazione assoluta. La compressione/decompressione può trasformarlo in pneumotorace iperteso. Prima del trattamento: drenaggio toracico se presente.</p>
+        <h3 class="sub-h">Relative (richiedono valutazione caso per caso, non escludono l'urgenza salvavita)</h3>
+        <ul class="checklist">
+          <li>BPCO con bolle/blebs, pregresso pneumotorace spontaneo</li>
+          <li>Infezioni delle alte vie respiratorie, otite media non trattata (rischio di barotrauma dell'orecchio medio)</li>
+          <li>Chirurgia toracica recente</li>
+          <li>Epilessia / storia di convulsioni (l'iperossia può abbassare la soglia epilettogena)</li>
+          <li>Febbre elevata non controllata (aumenta il rischio di tossicità da ossigeno sul SNC)</li>
+          <li>Claustrofobia severa (soprattutto in camera monoposto)</li>
+          <li>Alcuni farmaci: bleomicina (fibrosi polmonare), doxorubicina, cisplatino, disulfiram (interferisce con la tolleranza all'ossigeno)</li>
+          <li>Gravidanza: <b>non</b> è controindicazione nelle urgenze salvavita (es. CO grave); da valutare rapporto rischio/beneficio nelle indicazioni elettive</li>
+        </ul>
+        <p class="note">In urgenza, il principio guida è: nessuna controindicazione relativa giustifica il ritardo del trattamento di una condizione tempo-dipendente grave, salvo la gestione preliminare del pneumotorace.</p>
+        <p class="source">Fonte: StatPearls — Hyperbaric Oxygen Therapy Contraindications, 2025; StatPearls — Hyperbaric Contraindicated Chemotherapeutic Agents, 2023.</p>
+      </div></div>
+    </div>
+
+  </section>
+
+  <!-- ==================== ESAME CLINICO ==================== -->
+  <section id="esame" class="section">
+
+    <div class="card open">
+      <div class="card-head"><h2>Intossicazione da monossido di carbonio — checklist interattiva</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Seleziona tutti i segni/sintomi presenti nel paziente. La gravità stimata e la relativa indicazione terapeutica si aggiornano automaticamente.</p>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Lievi</h3>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="lieve"> Cefalea</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="lieve"> Nausea</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="lieve"> Vertigini</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="lieve"> Astenia</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="lieve"> Lieve confusione</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Moderati</h3>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="moderata"> Cefalea intensa</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="moderata"> Vomito</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="moderata"> Tachicardia</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="moderata"> Tachipnea</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="moderata"> Alterazione dello stato mentale</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="moderata"> Dolore toracico non ischemico</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Severi — criteri per OTI urgente</h3>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Perdita di coscienza (anche transitoria)</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Deficit neurologico focale</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Convulsioni</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Ischemia cardiaca (ECG/troponina)</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Acidosi metabolica severa</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Instabilità emodinamica</label>
+          <label class="chk"><input type="checkbox" class="co-chk" data-sev="severa"> Gravidanza con COHb elevata / sofferenza fetale</label>
+        </div>
+        <div id="coOut" class="calc-out sev-none">Seleziona almeno un segno/sintomo per vedere la valutazione.</div>
+        <p class="note warn">La sola concentrazione di COHb non predice in modo affidabile la gravità clinica: la decisione si basa sui criteri clinici sopra, non sul solo valore numerico.</p>
+        <p class="note">Nell'anamnesi: fonte di esposizione, durata, coesposizione ad incendio (sospettare anche intossicazione da cianuro), altre vittime nello stesso ambiente, stato di gravidanza.</p>
+      </div></div>
+    </div>
+
+    <div class="card open">
+      <div class="card-head"><h2>Malattia da decompressione / AGE — checklist interattiva</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Seleziona tutti i segni/sintomi presenti. L'algoritmo distingue Tipo I, Tipo II e il sospetto di embolia gassosa arteriosa (AGE), indicando la tabella di trattamento consigliata.</p>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Tipo I — lieve ("pain-only")</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Dolore articolare/muscolare (bends)</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Prurito / rash cutaneo</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Cutis marmorata (marezzatura cutanea)</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Linfedema localizzato</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Astenia / malessere aspecifico</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Tipo II — grave (neurologico / cardiopolmonare)</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Parestesie</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Debolezza / paralisi</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Disturbi sfinterici (vescicale/intestinale)</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Atassia</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Vertigine severa / nistagmo ("the staggers")</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Dolore toracico pleuritico / dispnea / tosse ("the chokes")</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Alterazione dello stato di coscienza / coma</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Sospetto AGE (embolia gassosa arteriosa)</h3>
+          <label class="chk"><input type="checkbox" id="dcsAge"> Esordio entro 10 minuti dalla risalita, con perdita di coscienza improvvisa o deficit neurologico focale acuto</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Solo se unicamente sintomi di Tipo I</h3>
+          <label class="chk"><input type="checkbox" id="dcsNegExam"> Esame neurologico completo eseguito ed è <b>negativo</b></label>
+        </div>
+        <div id="dcsOut" class="calc-out sev-none">Seleziona almeno un segno/sintomo per vedere la valutazione.</div>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Anamnesi subacquea mirata</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <ul class="checklist">
+          <li>Profilo dell'immersione (profondità, durata, tempi di risalita) — dati del computer subacqueo se disponibile</li>
+          <li>Decompressione omessa o non corretta, risalita rapida/di emergenza</li>
+          <li>Immersioni ripetitive, intervallo tra le immersioni</li>
+          <li>Volo aereo o salita in quota entro 24h dall'ultima immersione</li>
+          <li>Livello di sforzo fisico durante/dopo l'immersione</li>
+          <li>Comorbidità cardiopolmonari, pregressi traumi muscoloscheletrici (diagnosi differenziale con dolore MDD-simile)</li>
+          <li>Tempo trascorso dalla comparsa dei sintomi alla presentazione in PS</li>
+        </ul>
+      </div></div>
+    </div>
+
+  </section>
+
+  <!-- ==================== ESAMI STRUMENTALI PRE-OTI ==================== -->
+  <section id="strumentali" class="section">
+
+    <div class="card open">
+      <div class="card-head"><h2>Workup essenziale prima del trattamento</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Esame</th><th>Perché</th></tr></thead>
+          <tbody>
+            <tr><td><span class="drug">Rx torace</span></td><td><b>Obbligatorio</b> in tutti i pazienti prima della compressione: escludere pneumotorace (controindicazione assoluta)</td></tr>
+            <tr><td><span class="drug">Emogasanalisi con CO-ossimetria</span></td><td>Quantifica COHb; utile anche per lo stato acido-base (acidosi metabolica come criterio di gravità in CO)</td></tr>
+            <tr><td><span class="drug">ECG a 12 derivazioni</span></td><td>Ischemia miocardica (frequente in intossicazione da CO, specie in pazienti con cardiopatia nota), aritmie</td></tr>
+            <tr><td><span class="drug">Troponina</span></td><td>Se sospetto clinico o ECG dubbio, specie in intossicazione da CO moderata-severa</td></tr>
+            <tr><td><span class="drug">Glicemia</span></td><td>Escludere ipoglicemia come causa alternativa/concomitante di alterazione dello stato mentale</td></tr>
+            <tr><td><span class="drug">Test di gravidanza</span></td><td>In tutte le donne in età fertile: non controindica l'urgenza salvavita ma va documentato e comunicato all'équipe iperbarica</td></tr>
+            <tr><td><span class="drug">Otoscopia</span></td><td>Valutare pervietà tubarica/timpano: rischio di barotrauma dell'orecchio medio durante la compressione</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note warn">Nessuno di questi esami, se non disponibile rapidamente, deve ritardare il trattamento di una condizione tempo-dipendente grave (MDD Tipo II, AGE, CO severo) oltre il tempo strettamente necessario per l'Rx torace.</p>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Esami di secondo livello (non ritardano il trattamento)</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <ul class="checklist">
+          <li><b>TC encefalo</b>: nel sospetto di CO severo con alterazione dello stato mentale persistente, o per escludere cause alternative in MDD/AGE con deficit focale — da eseguire senza ritardare la ricompressione se la diagnosi clinica è già chiara</li>
+          <li><b>RM encefalo/midollo</b>: nel follow-up di MDD neurologica con deficit persistenti, non in urgenza</li>
+          <li><b>Ecocardiografia</b>: se sospetto forame ovale pervio (fattore di rischio per MDD/AGE) o disfunzione cardiaca da CO severo</li>
+          <li><b>Elettromiografia/potenziali evocati</b>: nel follow-up di MDD neurologica con deficit residui</li>
+        </ul>
+        <p class="source">Fonte: StatPearls — Decompression Sickness, 2023; Emergency Care BC — Decompression Sickness Clinical Summary.</p>
+      </div></div>
+    </div>
+
+  </section>
+
+  <!-- ==================== TABELLE TERAPEUTICHE ==================== -->
+  <section id="tabelle" class="section">
+
+    <div class="card open">
+      <div class="card-head"><h2>Malattia da decompressione / AGE — US Navy Treatment Tables</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <h3 class="sub-h">Tabella 6 — standard per MDD Tipo II e AGE</h3>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Profondità</th><th>Durata</th><th>Gas respirato</th></tr></thead>
+          <tbody>
+            <tr><td class="num">18 m (60 ft)</td><td class="num">20 min</td><td>O₂</td></tr>
+            <tr><td class="num">18 m</td><td class="num">5 min</td><td>Aria</td></tr>
+            <tr><td class="num">18 m</td><td class="num">20 min</td><td>O₂</td></tr>
+            <tr><td class="num">18 m</td><td class="num">5 min</td><td>Aria</td></tr>
+            <tr><td class="num">18 m</td><td class="num">20 min</td><td>O₂</td></tr>
+            <tr><td class="num">18 → 9 m</td><td class="num">30 min</td><td>O₂ (risalita lenta)</td></tr>
+            <tr><td class="num">9 m</td><td class="num">15 min</td><td>Aria</td></tr>
+            <tr><td class="num">9 m</td><td class="num">60 min</td><td>O₂</td></tr>
+            <tr><td class="num">9 m</td><td class="num">15 min</td><td>Aria</td></tr>
+            <tr><td class="num">9 m</td><td class="num">60 min</td><td>O₂</td></tr>
+            <tr><td class="num">9 → 0 m</td><td class="num">30 min</td><td>O₂ (risalita lenta)</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note">Tempo totale ~4h45min (285 min). Pressione massima 18 msw (2,8 ATA). Se sintomi severi persistono/peggiorano nei primi 20 min a 18m, passare a Tabella 6A (compressione aggiuntiva a 50 ft/2,8 ATA prima di proseguire).</p>
+
+        <h3 class="sub-h">Tabella 5 — MDD Tipo I lieve (dolore isolato, esame neurologico completo negativo)</h3>
+        <p class="note">Utilizzabile solo se un esame neurologico completo è stato eseguito ed è negativo, e se il Diving Medical Officer conferma l'assenza di segni neurologici. In caso di dubbio, o se l'esame neurologico non è stato possibile prima della ricompressione, <b>utilizzare comunque la Tabella 6</b>.</p>
+
+        <h3 class="sub-h">Tabella 6A — AGE o MDD con sintomi severi immediati</h3>
+        <p class="note">Compressione iniziale a 50 ft (2,8 ATA) con aria, poi eventuale ulteriore compressione fino a 165 ft se necessario per il sollievo dei sintomi, seguita da transizione a Tabella 6 una volta raggiunta la stabilizzazione clinica.</p>
+
+        <h3 class="sub-h">Tabella 4 — casi refrattari, necessità di trattamenti prolungati/ripetuti</h3>
+        <p class="note">Utilizzata quando i sintomi non rispondono adeguatamente alla Tabella 6 iniziale: trattamento prolungato a pressione ridotta rispetto alla 6A, con più cicli di O₂/aria a 18-9m.</p>
+
+        <p class="source">Fonte: U.S. Navy Diving Manual, Revision 7, Volume 5 — Diving Medicine and Recompression Chamber Operations, Naval Sea Systems Command.</p>
+      </div></div>
+    </div>
+
+    <div class="card open">
+      <div class="card-head"><h2>Intossicazione da monossido di carbonio — protocollo</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Non esiste un'unica tabella universalmente standardizzata come per la MDD; il protocollo più utilizzato e validato dal trial randomizzato di Weaver et al. (NEJM 2002) prevede:</p>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Fase</th><th>Pressione</th><th>Durata</th></tr></thead>
+          <tbody>
+            <tr><td>1ª fase</td><td class="num">3,0 ATA</td><td class="num">60 min (O₂ 100%)</td></tr>
+            <tr><td>2ª fase</td><td class="num">2,0 ATA</td><td class="num">60 min (O₂ 100%)</td></tr>
+            <tr><td>3ª fase (opzionale)</td><td class="num">2,0 ATA</td><td class="num">60 min (O₂ 100%, se paziente ancora sintomatico)</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note">Nei casi severi/persistenza di sintomi: considerare 2–3 trattamenti aggiuntivi con cadenza bi-giornaliera (2 volte/die) per gestire il danno da ischemia-riperfusione.</p>
+        <p class="note warn">Obiettivo generale, indipendentemente dal protocollo specifico adottato localmente: O₂ 100% a 2–3 ATA per 60–90 minuti, iniziato il più precocemente possibile dall'esposizione.</p>
+        <p class="source">Fonte: Weaver LK et al. Hyperbaric oxygen for acute carbon monoxide poisoning. N Engl J Med 2002;347:1057-67; StatPearls — Hyperbaric Treatment of Carbon Monoxide Toxicity, 2023.</p>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Altre emergenze — protocolli di riferimento</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Condizione</th><th>Protocollo indicativo</th></tr></thead>
+          <tbody>
+            <tr><td>Gangrena gassosa / infezioni necrotizzanti da anaerobi</td><td>3,0 ATA, 90 min: 3 sedute nelle prime 24h, poi 2 sedute/die fino a stabilizzazione clinica; sempre in associazione a debridement chirurgico e terapia antibiotica</td></tr>
+            <tr><td>Sindrome compartimentale / crush injury con tessuto a rischio</td><td>2,0–2,4 ATA, 2 volte/die per 2–7 giorni; iniziare idealmente entro 4–6h dalla lesione</td></tr>
+            <tr><td>Occlusione dell'arteria centrale della retina</td><td>2,4–2,8 ATA; trattamento urgente ripetuto nelle prime 24–48h, poi rivalutazione</td></tr>
+            <tr><td>Ipoacusia improvvisa neurosensoriale</td><td>2,0–2,5 ATA, 90 min/seduta, 10–20 sedute; in associazione a corticosteroidi</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note">Questi protocolli variano tra i centri iperbarici: verificare sempre lo schema specifico approvato dalla propria struttura.</p>
+        <p class="source">Fonte: Huang ET (ed.). UHMS Hyperbaric Medicine Indications Manual, 15ª edizione, 2023.</p>
+      </div></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <strong>Avvertenza clinica:</strong> strumento di supporto alla consultazione per la valutazione dell'indicazione a terapia iperbarica, non sostituisce il giudizio clinico né i protocolli in uso presso il proprio centro iperbarico, né il parere del Diving Medical Officer/medico iperbarico per i casi complessi. Verificare sempre pressione, durata e schema di trattamento secondo il protocollo locale prima di ogni seduta. I contenuti sono tratti da linee guida internazionali (vedi fonti in ciascuna scheda).
+</footer>
+
+<script>
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.target).classList.add('active');
+  });
+});
+document.querySelectorAll('.card-head').forEach(function(head){
+  head.addEventListener('click', function(){
+    head.parentElement.classList.toggle('open');
+  });
+});
+
+// ---------- CO poisoning severity checklist ----------
+var coOut = document.getElementById('coOut');
+function computeCO(){
+  var checked = Array.from(document.querySelectorAll('.co-chk:checked'));
+  if(checked.length === 0){
+    coOut.className = 'calc-out sev-none';
+    coOut.innerHTML = 'Seleziona almeno un segno/sintomo per vedere la valutazione.';
+    return;
+  }
+  var sevs = checked.map(function(c){ return c.dataset.sev; });
+  var level, label, html;
+  if(sevs.indexOf('severa') !== -1){
+    level = 'severa';
+    html = '<div class="big">Intossicazione SEVERA</div>' +
+      '<p class="note" style="margin-top:4px">OTI <b>indicata con urgenza</b>. Protocollo di riferimento: 3,0 ATA × 60 min + 2,0 ATA × 60 min (+ eventuale 3ª fase 2,0 ATA × 60 min se paziente ancora sintomatico). Attivare consulenza iperbarica urgente e verificare Rx torace prima della compressione.</p>';
+  } else if(sevs.indexOf('moderata') !== -1){
+    level = 'moderata';
+    html = '<div class="big">Intossicazione MODERATA</div>' +
+      '<p class="note" style="margin-top:4px">Valutare OTI se disponibile in tempi rapidi; come minimo ossigeno normobarico ad alto flusso (FiO₂ 100%) e rivalutazione clinica seriata. Consulto iperbarico consigliato, soprattutto se il quadro non migliora rapidamente con O₂ normobarico.</p>';
+  } else {
+    level = 'lieve';
+    html = '<div class="big">Intossicazione LIEVE</div>' +
+      '<p class="note" style="margin-top:4px">OTI generalmente non necessaria. Ossigeno normobarico ad alto flusso e osservazione clinica. Richiedere comunque consulto iperbarico in caso di persistenza dei sintomi, dubbio clinico, o comparsa di nuovi segni.</p>';
+  }
+  coOut.className = 'calc-out sev-' + level;
+  coOut.innerHTML = html;
+}
+document.querySelectorAll('.co-chk').forEach(function(c){ c.addEventListener('change', computeCO); });
+
+// ---------- DCS / AGE severity checklist ----------
+var dcsOut = document.getElementById('dcsOut');
+var dcsAge = document.getElementById('dcsAge');
+var dcsNegExam = document.getElementById('dcsNegExam');
+function computeDCS(){
+  var checked = Array.from(document.querySelectorAll('.dcs-chk:checked'));
+  var ageFlag = dcsAge.checked;
+  var negExam = dcsNegExam.checked;
+
+  if(checked.length === 0 && !ageFlag){
+    dcsOut.className = 'calc-out sev-none';
+    dcsOut.innerHTML = 'Seleziona almeno un segno/sintomo per vedere la valutazione.';
+    return;
+  }
+
+  var sevs = checked.map(function(c){ return c.dataset.sev; });
+  var hasTipo2 = sevs.indexOf('tipo2') !== -1;
+  var hasTipo1 = sevs.indexOf('tipo1') !== -1;
+
+  var level, html;
+  if(ageFlag){
+    level = 'severa';
+    html = '<div class="big">Sospetta embolia gassosa arteriosa (AGE)</div>' +
+      '<p class="note" style="margin-top:4px">Trattare come emergenza massima: <b>Tabella 6A</b> (compressione iniziale a 50 ft/2,8 ATA con aria, eventuale ulteriore compressione se necessario per il sollievo dei sintomi, poi transizione a Tabella 6). Non ritardare la ricompressione per differenziare da MDD Tipo II: il trattamento iniziale è sovrapponibile.</p>';
+  } else if(hasTipo2){
+    level = 'severa';
+    html = '<div class="big">MDD Tipo II — grave</div>' +
+      '<p class="note" style="margin-top:4px">Ricompressione secondo <b>Tabella 6</b>. Se sintomi severi e immediati o assenza di miglioramento nei primi 20 minuti a 18m, passare a <b>Tabella 6A</b>.</p>';
+  } else if(hasTipo1 && negExam){
+    level = 'moderata';
+    html = '<div class="big">MDD Tipo I — lieve, esame neurologico negativo</div>' +
+      '<p class="note" style="margin-top:4px">Possibile uso della <b>Tabella 5</b>, solo previa conferma del Diving Medical Officer. In caso di qualsiasi dubbio, utilizzare comunque la Tabella 6.</p>';
+  } else if(hasTipo1 && !negExam){
+    level = 'severa';
+    html = '<div class="big">MDD Tipo I — esame neurologico non confermato negativo</div>' +
+      '<p class="note" style="margin-top:4px">In assenza di un esame neurologico completo e negativo, trattare per prudenza come Tipo II: <b>Tabella 6</b>. Eseguire l\'esame neurologico completo appena possibile.</p>';
+  } else {
+    level = 'lieve';
+    html = '<div class="big">Quadro da rivalutare</div><p class="note" style="margin-top:4px">Combinazione di sintomi non tipica: rivalutare clinicamente ed eseguire un esame neurologico completo.</p>';
+  }
+  dcsOut.className = 'calc-out sev-' + level;
+  dcsOut.innerHTML = html;
+}
+document.querySelectorAll('.dcs-chk').forEach(function(c){ c.addEventListener('change', computeDCS); });
+dcsAge.addEventListener('change', computeDCS);
+dcsNegExam.addEventListener('change', computeDCS);
+</script>
+
+</body>
+</html>
