@@ -176,32 +176,43 @@
     <div class="card open">
       <div class="card-head"><h2>Malattia da decompressione / AGE — checklist interattiva</h2><span class="chevron">▾</span></div>
       <div class="card-body"><div class="card-body-inner">
-        <p class="note">Seleziona tutti i segni/sintomi presenti. L'algoritmo distingue Tipo I, Tipo II e il sospetto di embolia gassosa arteriosa (AGE), indicando la tabella di trattamento consigliata.</p>
+        <p class="note">Seleziona tutti i segni/sintomi presenti, organizzati per apparato. La gravità di ciascun sintomo non è indicata in etichetta: è l'algoritmo a calcolarla e a determinare la severità complessiva, la tabella di trattamento e le tempistiche.</p>
+
         <div class="chk-group">
-          <h3 class="sub-h" style="margin-top:0">Tipo I — lieve ("pain-only")</h3>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Dolore articolare/muscolare (bends)</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Prurito / rash cutaneo</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Cutis marmorata (marezzatura cutanea)</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Linfedema localizzato</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo1"> Astenia / malessere aspecifico</label>
+          <h3 class="sub-h" style="margin-top:0">Apparato cutaneo e linfatico</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="lieve"> Prurito o rash cutaneo semplice</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="lieve"> Linfedema localizzato</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Cutis marmorata (marezzatura cutanea)</label>
         </div>
         <div class="chk-group">
-          <h3 class="sub-h" style="margin-top:0">Tipo II — grave (neurologico / cardiopolmonare)</h3>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Parestesie</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Debolezza / paralisi</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Disturbi sfinterici (vescicale/intestinale)</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Atassia</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Vertigine severa / nistagmo ("the staggers")</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Dolore toracico pleuritico / dispnea / tosse ("the chokes")</label>
-          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="tipo2"> Alterazione dello stato di coscienza / coma</label>
+          <h3 class="sub-h" style="margin-top:0">Apparato muscoloscheletrico</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="lieve"> Dolore articolare o muscolare localizzato ("bends")</label>
         </div>
         <div class="chk-group">
-          <h3 class="sub-h" style="margin-top:0">Sospetto AGE (embolia gassosa arteriosa)</h3>
-          <label class="chk"><input type="checkbox" id="dcsAge"> Esordio entro 10 minuti dalla risalita, con perdita di coscienza improvvisa o deficit neurologico focale acuto</label>
+          <h3 class="sub-h" style="margin-top:0">Apparato neurologico e stato mentale</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="lieve"> Astenia intensa o malessere aspecifico</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Parestesie (formicolii, intorpidimento)</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Debolezza muscolare, paresi o paralisi degli arti</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Atassia (perdita di coordinazione/equilibrio)</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Vertigine severa o nistagmo involontario ("the staggers")</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" id="dcsLOC" data-sev="grave" data-age="1"> Alterazione dello stato di coscienza, confusione severa o coma</label>
+          <label class="chk"><input type="checkbox" class="dcs-chk" id="dcsFocal" data-sev="grave" data-age="1"> Deficit neurologico focale acuto (esordio improvviso)</label>
         </div>
         <div class="chk-group">
-          <h3 class="sub-h" style="margin-top:0">Solo se unicamente sintomi di Tipo I</h3>
-          <label class="chk"><input type="checkbox" id="dcsNegExam"> Esame neurologico completo eseguito ed è <b>negativo</b></label>
+          <h3 class="sub-h" style="margin-top:0">Apparato cardiorespiratorio</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Dispnea, tosse persistente o dolore toracico pleuritico ("the chokes")</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Apparato urogenitale e gastroenterico</h3>
+          <label class="chk"><input type="checkbox" class="dcs-chk" data-sev="grave"> Disturbi sfinterici (ritenzione urinaria acuta o incontinenza)</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Finestra temporale anamnestica</h3>
+          <label class="chk"><input type="checkbox" id="dcsTemporal"> I sintomi sono insorti entro 10 minuti dalla risalita dall'immersione?</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Esame obiettivo</h3>
+          <label class="chk"><input type="checkbox" id="dcsNegExam"> Esame neurologico completo eseguito ed è <b>negativo</b> <span style="color:var(--sub); font-weight:400;">(rilevante solo se sono selezionati esclusivamente sintomi lievi)</span></label>
         </div>
         <div id="dcsOut" class="calc-out sev-none">Seleziona almeno un segno/sintomo per vedere la valutazione.</div>
       </div></div>
@@ -297,9 +308,23 @@
         <p class="note">Compressione iniziale a 50 ft (2,8 ATA) con aria, poi eventuale ulteriore compressione fino a 165 ft se necessario per il sollievo dei sintomi, seguita da transizione a Tabella 6 una volta raggiunta la stabilizzazione clinica.</p>
 
         <h3 class="sub-h">Tabella 4 — casi refrattari, necessità di trattamenti prolungati/ripetuti</h3>
-        <p class="note">Utilizzata quando i sintomi non rispondono adeguatamente alla Tabella 6 iniziale: trattamento prolungato a pressione ridotta rispetto alla 6A, con più cicli di O₂/aria a 18-9m.</p>
+        <p class="note">Utilizzata in caso di deterioramento o recidiva dei sintomi, quando il paziente riceve beneficio aggiuntivo a una profondità di sollievo significativo (non oltre 165 fsw). Tempo a tale profondità 30–120 min secondo la risposta clinica; se disponibile ossigeno, cicli di 25 min di O₂ alternati a 5 min di aria, con un minimo di 4 cicli (2h totali) subito dopo l'arrivo a 60 ft.</p>
 
-        <p class="source">Fonte: U.S. Navy Diving Manual, Revision 7, Volume 5 — Diving Medicine and Recompression Chamber Operations, Naval Sea Systems Command.</p>
+        <h3 class="sub-h">Tabelle ad aria 1A, 2A, 3 — solo se l'ossigeno non è disponibile</h3>
+        <p class="note">Da considerarsi ultima risorsa quando l'ossigeno non è disponibile: il trattamento con ossigeno è sempre significativamente più efficace e va preferito quando possibile.</p>
+
+        <h3 class="sub-h">Tabella 7 — pericolo di vita (embolia gassosa grave / MDD pericolosa per la vita)</h3>
+        <p class="note">Da utilizzare <b>solo</b> in caso di pericolo di vita del paziente. Comporta isolamento del paziente e permanenza in camera di decompressione per 48 ore o più, con personale medico subacqueo esperto costantemente presente. Richiede un minimo di 12 ore a 60 ft, incluso il tempo già trascorso a tale profondità con Tabelle 4, 6 o 6A.</p>
+
+        <h3 class="sub-h">Tabella 8 — risalite profonde non controllate con decompressione persa</h3>
+        <p class="note">Adattamento della Tabella 65 della Royal Navy britannica, per risalite non controllate con perdita di oltre 60 minuti di decompressione. Compressione fino a 225 fsw; il programma da 60 ft in poi è identico alla Tabella 7.</p>
+
+        <h3 class="sub-h">Tabella 9 — sintomi residui dopo Tabella 6, CO/cianuro selezionati, inalazione fumi</h3>
+        <p class="note">Introdotta nel 1999 per il follow-up dopo risoluzione incompleta di MDD/AGE con Tabella 6, e per casi selezionati di intossicazione da CO o cianuro e inalazione di fumi. Fornisce 90 minuti di respirazione di O₂ a 45 ft, con pressione massima inferiore alla Tabella 5 (243 kPa) e minor rischio di tossicità da ossigeno sul SNC — ha sostituito l'uso della Tabella 5 come follow-up nella prassi USN.</p>
+
+        <p class="note">Tempistica di insorgenza dei sintomi dopo la risalita (dati USN): 42% entro 1h, 60% entro 3h, 83% entro 8h, 98% entro 24h. Anche sintomi lievi richiedono valutazione medica immediata.</p>
+
+        <p class="source">Fonti: U.S. Navy Diving Manual, Revision 7, Volume 5 — Diving Medicine and Recompression Chamber Operations, Naval Sea Systems Command; Mucedola A. "Le tabelle della marina statunitense per il trattamento iperbarico", Ocean4Future.</p>
       </div></div>
     </div>
 
@@ -396,49 +421,63 @@ document.querySelectorAll('.co-chk').forEach(function(c){ c.addEventListener('ch
 
 // ---------- DCS / AGE severity checklist ----------
 var dcsOut = document.getElementById('dcsOut');
-var dcsAge = document.getElementById('dcsAge');
+var dcsTemporal = document.getElementById('dcsTemporal');
 var dcsNegExam = document.getElementById('dcsNegExam');
+var dcsLOC = document.getElementById('dcsLOC');
+var dcsFocal = document.getElementById('dcsFocal');
+
 function computeDCS(){
   var checked = Array.from(document.querySelectorAll('.dcs-chk:checked'));
-  var ageFlag = dcsAge.checked;
+  var temporal = dcsTemporal.checked;
   var negExam = dcsNegExam.checked;
 
-  if(checked.length === 0 && !ageFlag){
+  if(checked.length === 0){
     dcsOut.className = 'calc-out sev-none';
     dcsOut.innerHTML = 'Seleziona almeno un segno/sintomo per vedere la valutazione.';
     return;
   }
 
-  var sevs = checked.map(function(c){ return c.dataset.sev; });
-  var hasTipo2 = sevs.indexOf('tipo2') !== -1;
-  var hasTipo1 = sevs.indexOf('tipo1') !== -1;
+  var hasGrave = checked.some(function(c){ return c.dataset.sev === 'grave'; });
+  var hasAgeSymptom = dcsLOC.checked || dcsFocal.checked;
+  var ageFlag = temporal && hasAgeSymptom;
 
   var level, html;
+  var workup = '<p class="note" style="margin-top:8px"><b>WORKUP STRUMENTALE PRE-OTI</b><br>' +
+    '1. Rx torace (<b>obbligatorio</b>): escludere pneumotorace, unica controindicazione assoluta prima di pressurizzare.<br>' +
+    '2. Otoscopia: valutare la pervietà tubarica.<br>' +
+    '3. Esami di supporto, SOLO se immediatamente disponibili e senza mai ritardare l\'OTI nelle forme gravi: emogasanalisi, ECG a 12 derivazioni, glicemia, test di gravidanza (se donna in età fertile — non controindica l\'urgenza salvavita ma va documentato).</p>';
+
   if(ageFlag){
     level = 'severa';
-    html = '<div class="big">Sospetta embolia gassosa arteriosa (AGE)</div>' +
-      '<p class="note" style="margin-top:4px">Trattare come emergenza massima: <b>Tabella 6A</b> (compressione iniziale a 50 ft/2,8 ATA con aria, eventuale ulteriore compressione se necessario per il sollievo dei sintomi, poi transizione a Tabella 6). Non ritardare la ricompressione per differenziare da MDD Tipo II: il trattamento iniziale è sovrapponibile.</p>';
-  } else if(hasTipo2){
+    html = '<div class="big">EMERGENZA ASSOLUTA — sospetto AGE</div>' +
+      '<p class="note" style="margin-top:4px"><b>TABELLA TERAPEUTICA INDICATIVA:</b> US Navy Tabella 6 (TT6). Se i sintomi peggiorano nei primi 20 min a 18m/60ft, passare a Tabella 6A.</p>' +
+      '<p class="note"><b>TEMPISTICHE:</b> ricompressione immediata. Un ritardo &gt;12h riduce il tasso di risoluzione favorevole dal 75% al 57%.</p>' +
+      workup;
+  } else if(hasGrave){
     level = 'severa';
     html = '<div class="big">MDD Tipo II — grave</div>' +
-      '<p class="note" style="margin-top:4px">Ricompressione secondo <b>Tabella 6</b>. Se sintomi severi e immediati o assenza di miglioramento nei primi 20 minuti a 18m, passare a <b>Tabella 6A</b>.</p>';
-  } else if(hasTipo1 && negExam){
+      '<p class="note" style="margin-top:4px"><b>TABELLA TERAPEUTICA INDICATIVA:</b> US Navy Tabella 6 (TT6). Se sintomi severi e immediati o assenza di miglioramento nei primi 20 min a 18m, passare a Tabella 6A.</p>' +
+      '<p class="note"><b>TEMPISTICHE:</b> ricompressione immediata. Un ritardo &gt;12h riduce il tasso di risoluzione favorevole dal 75% al 57%.</p>' +
+      workup;
+  } else if(negExam){
     level = 'moderata';
     html = '<div class="big">MDD Tipo I — lieve, esame neurologico negativo</div>' +
-      '<p class="note" style="margin-top:4px">Possibile uso della <b>Tabella 5</b>, solo previa conferma del Diving Medical Officer. In caso di qualsiasi dubbio, utilizzare comunque la Tabella 6.</p>';
-  } else if(hasTipo1 && !negExam){
-    level = 'severa';
-    html = '<div class="big">MDD Tipo I — esame neurologico non confermato negativo</div>' +
-      '<p class="note" style="margin-top:4px">In assenza di un esame neurologico completo e negativo, trattare per prudenza come Tipo II: <b>Tabella 6</b>. Eseguire l\'esame neurologico completo appena possibile.</p>';
+      '<p class="note" style="margin-top:4px"><b>TABELLA TERAPEUTICA INDICATIVA:</b> US Navy Tabella 5 (TT5), solo previa conferma del Diving Medical Officer. Se durante il trattamento emergono anomalie neurologiche, passare a Tabella 6.</p>' +
+      '<p class="note"><b>TEMPISTICHE:</b> ricompressione appena possibile; un ritardo &gt;12h riduce comunque il tasso di risoluzione favorevole.</p>' +
+      workup;
   } else {
-    level = 'lieve';
-    html = '<div class="big">Quadro da rivalutare</div><p class="note" style="margin-top:4px">Combinazione di sintomi non tipica: rivalutare clinicamente ed eseguire un esame neurologico completo.</p>';
+    level = 'severa';
+    html = '<div class="big">Sintomi lievi, esame neurologico non confermato negativo</div>' +
+      '<p class="note" style="margin-top:4px">In assenza di un esame neurologico completo e negativo, trattare per prudenza come Tipo II.</p>' +
+      '<p class="note"><b>TABELLA TERAPEUTICA INDICATIVA:</b> US Navy Tabella 6 (TT6). Eseguire l\'esame neurologico completo appena possibile.</p>' +
+      '<p class="note"><b>TEMPISTICHE:</b> ricompressione immediata. Un ritardo &gt;12h riduce il tasso di risoluzione favorevole dal 75% al 57%.</p>' +
+      workup;
   }
   dcsOut.className = 'calc-out sev-' + level;
   dcsOut.innerHTML = html;
 }
 document.querySelectorAll('.dcs-chk').forEach(function(c){ c.addEventListener('change', computeDCS); });
-dcsAge.addEventListener('change', computeDCS);
+dcsTemporal.addEventListener('change', computeDCS);
 dcsNegExam.addEventListener('change', computeDCS);
 </script>
 
