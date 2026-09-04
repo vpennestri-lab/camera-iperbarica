@@ -44,6 +44,7 @@
   .note.warn{color:var(--warn); font-weight:600;}
   .note.danger{color:#b91c1c; font-weight:700;}
   .tbl-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .chart-wrap{background:#fafbfc; border:1px solid var(--line); border-radius:10px; padding:10px 8px 4px; margin:8px 0; overflow-x:auto; -webkit-overflow-scrolling:touch;}
   .source{font-size:.68rem; color:var(--sub); opacity:.85; margin-top:8px; padding-top:8px; border-top:1px dashed var(--line);}
   .drug{font-weight:600;}
   .badge{display:inline-block; background:var(--ocean-light); color:var(--ocean); font-size:.72rem; font-weight:700; padding:4px 9px; border-radius:20px; margin:2px 4px 2px 0;}
@@ -218,18 +219,43 @@
       </div></div>
     </div>
 
-    <div class="card">
-      <div class="card-head"><h2>Anamnesi subacquea mirata</h2><span class="chevron">▾</span></div>
+    <div class="card open">
+      <div class="card-head"><h2>Anamnesi subacquea mirata e probabilità pre-test di MDD</h2><span class="chevron">▾</span></div>
       <div class="card-body"><div class="card-body-inner">
-        <ul class="checklist">
-          <li>Profilo dell'immersione (profondità, durata, tempi di risalita) — dati del computer subacqueo se disponibile</li>
-          <li>Decompressione omessa o non corretta, risalita rapida/di emergenza</li>
-          <li>Immersioni ripetitive, intervallo tra le immersioni</li>
-          <li>Volo aereo o salita in quota entro 24h dall'ultima immersione</li>
-          <li>Livello di sforzo fisico durante/dopo l'immersione</li>
-          <li>Comorbidità cardiopolmonari, pregressi traumi muscoloscheletrici (diagnosi differenziale con dolore MDD-simile)</li>
-          <li>Tempo trascorso dalla comparsa dei sintomi alla presentazione in PS</li>
-        </ul>
+        <p class="note">Profilo dell'immersione (profondità, durata, tempi di risalita — dati del computer subacqueo se disponibile), tempo trascorso dalla comparsa dei sintomi alla presentazione in PS, comorbidità cardiopolmonari e pregressi traumi muscoloscheletrici (diagnosi differenziale con dolore MDD-simile).</p>
+
+        <p class="note">Per un confronto rapido tra il profilo di immersione riferito dal paziente e i tempi di decompressione teoricamente richiesti (algoritmo Bühlmann ZH-L16C con gradient factors), può essere utile un pianificatore di decompressione online come <a href="https://www.ovm-planner.com/" target="_blank" rel="noopener">OVM Dive Planner</a> — utile per farsi un'idea di quanto il profilo eseguito si discosti da uno "a norma". <span style="color:var(--warn); font-weight:600;">Lo strumento è dichiaratamente a scopo educativo/di simulazione (non certificato per la pianificazione reale di immersioni) e non sostituisce i dati del computer subacqueo del paziente né il parere del Diving Medical Officer.</span></p>
+
+        <p class="note warn"><b>Supporto alla decisione nei casi limite</b> — non è uno score diagnostico validato: nessuno strumento di questo tipo è universalmente riconosciuto in medicina subacquea. È una stima qualitativa strutturata sui fattori di rischio noti da letteratura (DAN, studi epidemiologici), utile quando il quadro sintomatologico da solo non è dirimente.</p>
+
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Fattori di rischio maggiori (profilo d'immersione)</h3>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="major"> Decompressione omessa o non rispettata</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="major"> Risalita rapida o non controllata/di emergenza</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="major"> Immersione profonda (&gt;18 m) e/o prolungata oltre i limiti no-decompressione</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="major"> Immersioni ripetitive con intervallo in superficie breve (&lt;48h) o più immersioni nella stessa giornata</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="major"> Volo aereo o salita in quota entro 24h dall'immersione</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="major"> Disidratazione</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Fattori di rischio minori (individuali/ambientali)</h3>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> Acqua fredda</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> Corrente forte o elevato carico di lavoro durante l'immersione</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> Sforzo fisico intenso durante o subito dopo l'immersione</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> Forame ovale pervio noto o sospetto</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> Pregresso episodio di MDD</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> BMI agli estremi (sottopeso severo od obesità)</label>
+          <label class="chk"><input type="checkbox" class="dive-chk" data-w="minor"> Scarsa forma fisica cardiovascolare</label>
+        </div>
+        <div class="chk-group">
+          <h3 class="sub-h" style="margin-top:0">Quadro sintomatologico</h3>
+          <label class="chk"><input type="radio" name="symptomClarity" id="symClear" value="clear"> Sintomi chiari e tipici (checklist "Esame clinico" già dirimente)</label>
+          <label class="chk"><input type="radio" name="symptomClarity" id="symAmbig" value="ambig"> Sintomi sfumati/aspecifici, quadro non chiaramente dirimente</label>
+        </div>
+
+        <div id="diveOut" class="calc-out sev-none">Seleziona i fattori presenti (anche zero, se assenti) e indica la chiarezza del quadro sintomatologico.</div>
+
+        <p class="source">Fonti: DAN — Decompression Illness Risk Factors; Sadowski A et al. Risk factors of decompression sickness in scuba diving, systematic review, J Educ Health Sport 2020 (dati OR per disidratazione, immersioni ripetitive, violazione del profilo).</p>
       </div></div>
     </div>
 
@@ -281,6 +307,68 @@
       <div class="card-head"><h2>Malattia da decompressione / AGE — US Navy Treatment Tables</h2><span class="chevron">▾</span></div>
       <div class="card-body"><div class="card-body-inner">
         <h3 class="sub-h">Tabella 6 — standard per MDD Tipo II e AGE</h3>
+
+        <div class="chart-wrap">
+        <svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+          <style>
+            .axis-line{stroke:#c7ccd4; stroke-width:1;}
+            .grid-line{stroke:#e2e6ec; stroke-width:1; stroke-dasharray:3,3;}
+            .axis-label{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:11px; fill:#5b6472;}
+            .axis-label-bold{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:12px; font-weight:700; fill:#1e2430;}
+            .seg-o2{stroke:#0c5c8a; stroke-width:6; stroke-linecap:round;}
+            .seg-air{stroke:#b3541e; stroke-width:6; stroke-linecap:round;}
+            .legend-text{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:12px; fill:#1e2430;}
+          </style>
+
+          <!-- Grid: depth lines -->
+          <line class="grid-line" x1="70" y1="20" x2="780" y2="20"/>
+          <line class="grid-line" x1="70" y1="135" x2="780" y2="135"/>
+          <line class="axis-line" x1="70" y1="250" x2="780" y2="250"/>
+
+          <!-- Depth axis labels -->
+          <text class="axis-label-bold" x="60" y="24" text-anchor="end">0 m</text>
+          <text class="axis-label" x="60" y="36" text-anchor="end">(1 ATA)</text>
+          <text class="axis-label-bold" x="60" y="139" text-anchor="end">9 m</text>
+          <text class="axis-label" x="60" y="151" text-anchor="end">(1,9 ATA)</text>
+          <text class="axis-label-bold" x="60" y="254" text-anchor="end">18 m</text>
+          <text class="axis-label" x="60" y="266" text-anchor="end">(2,8 ATA)</text>
+
+          <!-- Y axis title -->
+          <text class="axis-label" x="20" y="135" text-anchor="middle" transform="rotate(-90 20 135)">Profondità</text>
+
+          <!-- Vertical axis line -->
+          <line class="axis-line" x1="70" y1="20" x2="70" y2="250"/>
+
+          <!-- Time axis ticks -->
+          <text class="axis-label" x="70" y="270" text-anchor="middle">0</text>
+          <text class="axis-label" x="247" y="270" text-anchor="middle">70</text>
+          <text class="axis-label" x="362" y="270" text-anchor="middle">115</text>
+          <text class="axis-label" x="552" y="270" text-anchor="middle">190</text>
+          <text class="axis-label" x="780" y="270" text-anchor="middle">280 min</text>
+          <text class="axis-label" x="425" y="290" text-anchor="middle">Tempo dall'arrivo a 18 m (minuti)</text>
+
+          <!-- Profile segments -->
+          <line x1="70.0" y1="250.0" x2="120.7" y2="250.0" class="seg-o2"/>
+          <line x1="120.7" y1="250.0" x2="133.4" y2="250.0" class="seg-air"/>
+          <line x1="133.4" y1="250.0" x2="184.1" y2="250.0" class="seg-o2"/>
+          <line x1="184.1" y1="250.0" x2="196.8" y2="250.0" class="seg-air"/>
+          <line x1="196.8" y1="250.0" x2="247.5" y2="250.0" class="seg-o2"/>
+          <line x1="247.5" y1="250.0" x2="323.6" y2="135.0" class="seg-o2"/>
+          <line x1="323.6" y1="135.0" x2="361.6" y2="135.0" class="seg-air"/>
+          <line x1="361.6" y1="135.0" x2="513.8" y2="135.0" class="seg-o2"/>
+          <line x1="513.8" y1="135.0" x2="551.8" y2="135.0" class="seg-air"/>
+          <line x1="551.8" y1="135.0" x2="703.9" y2="135.0" class="seg-o2"/>
+          <line x1="703.9" y1="135.0" x2="780.0" y2="20.0" class="seg-o2"/>
+
+          <!-- Legend -->
+          <line x1="70" y1="300" x2="100" y2="300" class="seg-o2"/>
+          <text class="legend-text" x="106" y="304">Ossigeno 100%</text>
+          <line x1="250" y1="300" x2="280" y2="300" class="seg-air"/>
+          <text class="legend-text" x="286" y="304">Aria</text>
+        </svg>
+        </div>
+        <p class="note">Profilo grafico indicativo (non in scala millimetrica): profondità in metri sull'asse verticale, tempo cumulativo in minuti sull'asse orizzontale. Utile per visualizzare a colpo d'occhio l'alternanza O₂/aria e i due tratti di risalita lenta (18→9m e 9→0m).</p>
+
         <div class="tbl-wrap">
         <table>
           <thead><tr><th>Profondità</th><th>Durata</th><th>Gas respirato</th></tr></thead>
@@ -302,13 +390,102 @@
         <p class="note">Tempo totale ~4h45min (285 min). Pressione massima 18 msw (2,8 ATA). Se sintomi severi persistono/peggiorano nei primi 20 min a 18m, passare a Tabella 6A (compressione aggiuntiva a 50 ft/2,8 ATA prima di proseguire).</p>
 
         <h3 class="sub-h">Tabella 5 — MDD Tipo I lieve (dolore isolato, esame neurologico completo negativo)</h3>
-        <p class="note">Utilizzabile solo se un esame neurologico completo è stato eseguito ed è negativo, e se il Diving Medical Officer conferma l'assenza di segni neurologici. In caso di dubbio, o se l'esame neurologico non è stato possibile prima della ricompressione, <b>utilizzare comunque la Tabella 6</b>.</p>
+
+        <div class="chart-wrap">
+        <svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+          <style>
+            .axis-line{stroke:#c7ccd4; stroke-width:1;}
+            .grid-line{stroke:#e2e6ec; stroke-width:1; stroke-dasharray:3,3;}
+            .axis-label{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:11px; fill:#5b6472;}
+            .axis-label-bold{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:12px; font-weight:700; fill:#1e2430;}
+            .seg-o2{stroke:#0c5c8a; stroke-width:6; stroke-linecap:round;}
+            .seg-air{stroke:#b3541e; stroke-width:6; stroke-linecap:round;}
+            .legend-text{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:12px; fill:#1e2430;}
+          </style>
+          <line class="grid-line" x1="70" y1="20" x2="780" y2="20"/>
+          <line class="grid-line" x1="70" y1="135" x2="780" y2="135"/>
+          <line class="axis-line" x1="70" y1="250" x2="780" y2="250"/>
+          <text class="axis-label-bold" x="60" y="24" text-anchor="end">0 m</text>
+          <text class="axis-label" x="60" y="36" text-anchor="end">(1 ATA)</text>
+          <text class="axis-label-bold" x="60" y="139" text-anchor="end">9 m</text>
+          <text class="axis-label" x="60" y="151" text-anchor="end">(1,9 ATA)</text>
+          <text class="axis-label-bold" x="60" y="254" text-anchor="end">18 m</text>
+          <text class="axis-label" x="60" y="266" text-anchor="end">(2,8 ATA)</text>
+          <text class="axis-label" x="20" y="135" text-anchor="middle" transform="rotate(-90 20 135)">Profondità</text>
+          <line class="axis-line" x1="70" y1="20" x2="70" y2="250"/>
+          <text class="axis-label" x="70" y="270" text-anchor="middle">0</text>
+          <text class="axis-label" x="264" y="270" text-anchor="middle">45</text>
+          <text class="axis-label" x="393" y="270" text-anchor="middle">75</text>
+          <text class="axis-label" x="651" y="270" text-anchor="middle">135</text>
+          <text class="axis-label" x="780" y="270" text-anchor="middle">165 min</text>
+          <text class="axis-label" x="425" y="290" text-anchor="middle">Tempo dall'arrivo a 18 m (minuti)</text>
+          <line x1="70.0" y1="250.0" x2="156.1" y2="250.0" class="seg-o2"/>
+          <line x1="156.1" y1="250.0" x2="177.6" y2="250.0" class="seg-air"/>
+          <line x1="177.6" y1="250.0" x2="263.6" y2="250.0" class="seg-o2"/>
+          <line x1="263.6" y1="250.0" x2="392.7" y2="135.0" class="seg-o2"/>
+          <line x1="392.7" y1="135.0" x2="650.9" y2="135.0" class="seg-o2"/>
+          <line x1="650.9" y1="135.0" x2="780.0" y2="20.0" class="seg-o2"/>
+          <line x1="70" y1="300" x2="100" y2="300" class="seg-o2"/>
+          <text class="legend-text" x="106" y="304">Ossigeno 100%</text>
+          <line x1="250" y1="300" x2="280" y2="300" class="seg-air"/>
+          <text class="legend-text" x="286" y="304">Aria</text>
+        </svg>
+        </div>
+        <p class="note">Durata totale ~2h45min (165 min). Utilizzabile solo se un esame neurologico completo è stato eseguito ed è negativo, e se il Diving Medical Officer conferma l'assenza di segni neurologici. In caso di dubbio, o se l'esame neurologico non è stato possibile prima della ricompressione, <b>utilizzare comunque la Tabella 6</b>.</p>
 
         <h3 class="sub-h">Tabella 6A — AGE o MDD con sintomi severi immediati</h3>
-        <p class="note">Compressione iniziale a 50 ft (2,8 ATA) con aria, poi eventuale ulteriore compressione fino a 165 ft se necessario per il sollievo dei sintomi, seguita da transizione a Tabella 6 una volta raggiunta la stabilizzazione clinica.</p>
+
+        <div class="chart-wrap">
+        <svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+          <style>
+            .axis-line{stroke:#c7ccd4; stroke-width:1;}
+            .grid-line{stroke:#e2e6ec; stroke-width:1; stroke-dasharray:3,3;}
+            .axis-label{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:11px; fill:#5b6472;}
+            .axis-label-bold{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:12px; font-weight:700; fill:#1e2430;}
+            .seg-o2{stroke:#0c5c8a; stroke-width:6; stroke-linecap:round;}
+            .seg-air{stroke:#b3541e; stroke-width:6; stroke-linecap:round;}
+            .legend-text{font-family:-apple-system,Helvetica,Arial,sans-serif; font-size:12px; fill:#1e2430;}
+          </style>
+          <line class="grid-line" x1="70" y1="20" x2="780" y2="20"/>
+          <line class="grid-line" x1="70" y1="61.4" x2="780" y2="61.4"/>
+          <line class="grid-line" x1="70" y1="102.8" x2="780" y2="102.8"/>
+          <line class="axis-line" x1="70" y1="250" x2="780" y2="250"/>
+          <text class="axis-label-bold" x="60" y="24" text-anchor="end">0 m</text>
+          <text class="axis-label-bold" x="60" y="65" text-anchor="end">9 m</text>
+          <text class="axis-label-bold" x="60" y="107" text-anchor="end">18 m</text>
+          <text class="axis-label" x="60" y="118" text-anchor="end">(2,8 ATA)</text>
+          <text class="axis-label-bold" x="60" y="254" text-anchor="end">50 m*</text>
+          <text class="axis-label" x="20" y="135" text-anchor="middle" transform="rotate(-90 20 135)">Profondità</text>
+          <line class="axis-line" x1="70" y1="20" x2="70" y2="250"/>
+          <text class="axis-label" x="70" y="270" text-anchor="middle">0</text>
+          <text class="axis-label" x="214" y="270" text-anchor="middle">65</text>
+          <text class="axis-label" x="381" y="270" text-anchor="middle">140</text>
+          <text class="axis-label" x="713" y="270" text-anchor="middle">290</text>
+          <text class="axis-label" x="780" y="270" text-anchor="middle">320 min*</text>
+          <text class="axis-label" x="425" y="290" text-anchor="middle">Tempo dall'arrivo a 18 m (minuti)</text>
+          <line x1="70.0" y1="102.8" x2="81.1" y2="250.0" class="seg-air"/>
+          <line x1="81.1" y1="250.0" x2="147.7" y2="250.0" class="seg-air"/>
+          <line x1="147.7" y1="250.0" x2="214.2" y2="102.8" class="seg-air"/>
+          <line x1="214.2" y1="102.8" x2="258.6" y2="102.8" class="seg-o2"/>
+          <line x1="258.6" y1="102.8" x2="269.7" y2="102.8" class="seg-air"/>
+          <line x1="269.7" y1="102.8" x2="314.1" y2="102.8" class="seg-o2"/>
+          <line x1="314.1" y1="102.8" x2="380.6" y2="61.4" class="seg-o2"/>
+          <line x1="380.6" y1="61.4" x2="413.9" y2="61.4" class="seg-air"/>
+          <line x1="413.9" y1="61.4" x2="547.0" y2="61.4" class="seg-o2"/>
+          <line x1="547.0" y1="61.4" x2="580.3" y2="61.4" class="seg-air"/>
+          <line x1="580.3" y1="61.4" x2="713.4" y2="61.4" class="seg-o2"/>
+          <line x1="713.4" y1="61.4" x2="780.0" y2="20.0" class="seg-o2"/>
+          <line x1="70" y1="300" x2="100" y2="300" class="seg-o2"/>
+          <text class="legend-text" x="106" y="304">Ossigeno 100%</text>
+          <line x1="250" y1="300" x2="280" y2="300" class="seg-air"/>
+          <text class="legend-text" x="286" y="304">Aria</text>
+        </svg>
+        </div>
+        <p class="note">*Compressione iniziale a 18 m (60 ft, 2,8 ATA) con aria; eventuale ulteriore compressione fino a un massimo di 50 m (165 ft) se necessaria per il sollievo dei sintomi — profondità e permanenza (indicativamente fino a 30 min) sono titolate sulla risposta clinica, non fisse. Dopo la risalita a 18 m, il profilo prosegue identico alla Tabella 6. Durata totale indicativa ≥5h, variabile in base alla fase di compressione iniziale.</p>
 
         <h3 class="sub-h">Tabella 4 — casi refrattari, necessità di trattamenti prolungati/ripetuti</h3>
         <p class="note">Utilizzata in caso di deterioramento o recidiva dei sintomi, quando il paziente riceve beneficio aggiuntivo a una profondità di sollievo significativo (non oltre 165 fsw). Tempo a tale profondità 30–120 min secondo la risposta clinica; se disponibile ossigeno, cicli di 25 min di O₂ alternati a 5 min di aria, con un minimo di 4 cicli (2h totali) subito dopo l'arrivo a 60 ft.</p>
+        <p class="note warn">A differenza di Tabella 5/6/6A, la Tabella 4 non ha un profilo a durata fissa: si prolunga in base alla risposta clinica (può estendersi per molte ore). Per questo motivo non è rappresentata graficamente in questa scheda — fare riferimento al Diving Medical Officer per la titolazione caso per caso.</p>
 
         <h3 class="sub-h">Tabelle ad aria 1A, 2A, 3 — solo se l'ossigeno non è disponibile</h3>
         <p class="note">Da considerarsi ultima risorsa quando l'ossigeno non è disponibile: il trattamento con ossigeno è sempre significativamente più efficace e va preferito quando possibile.</p>
@@ -432,8 +609,15 @@ function computeDCS(){
   var negExam = dcsNegExam.checked;
 
   if(checked.length === 0){
-    dcsOut.className = 'calc-out sev-none';
-    dcsOut.innerHTML = 'Seleziona almeno un segno/sintomo per vedere la valutazione.';
+    if(negExam){
+      dcsOut.className = 'calc-out sev-lieve';
+      dcsOut.innerHTML = '<div class="big">Nessun segno/sintomo di MDD rilevato</div>' +
+        '<p class="note" style="margin-top:4px">Esame neurologico completo eseguito e negativo, nessun sintomo presente. OTI non indicata su base clinica attuale.</p>' +
+        '<p class="note">In presenza di un profilo di immersione a rischio (decompressione omessa, risalita rapida, immersioni ripetitive) mantenere osservazione clinica e rivalutare: i sintomi di MDD possono comparire fino a 24–48h dopo la risalita.</p>';
+    } else {
+      dcsOut.className = 'calc-out sev-none';
+      dcsOut.innerHTML = 'Seleziona almeno un segno/sintomo, oppure conferma l\'esame neurologico negativo, per vedere la valutazione.';
+    }
     return;
   }
 
@@ -479,6 +663,51 @@ function computeDCS(){
 document.querySelectorAll('.dcs-chk').forEach(function(c){ c.addEventListener('change', computeDCS); });
 dcsTemporal.addEventListener('change', computeDCS);
 dcsNegExam.addEventListener('change', computeDCS);
+
+// ---------- Dive history / DCS pre-test probability ----------
+var diveOut = document.getElementById('diveOut');
+function computeDive(){
+  var majorCount = document.querySelectorAll('.dive-chk[data-w="major"]:checked').length;
+  var minorCount = document.querySelectorAll('.dive-chk[data-w="minor"]:checked').length;
+  var symptomRadio = document.querySelector('input[name="symptomClarity"]:checked');
+
+  if(majorCount === 0 && minorCount === 0 && !symptomRadio){
+    diveOut.className = 'calc-out sev-none';
+    diveOut.innerHTML = 'Seleziona i fattori presenti (anche zero, se assenti) e indica la chiarezza del quadro sintomatologico.';
+    return;
+  }
+
+  var level, probLabel;
+  if(majorCount >= 3 || (majorCount >= 2 && minorCount >= 2)){
+    level = 'severa'; probLabel = 'ALTA';
+  } else if(majorCount === 2 || (majorCount === 1 && minorCount >= 2) || minorCount >= 4){
+    level = 'moderata'; probLabel = 'MODERATA';
+  } else {
+    level = 'lieve'; probLabel = 'BASSA';
+  }
+
+  var ambig = symptomRadio && symptomRadio.value === 'ambig';
+
+  var html = '<div class="big">Probabilità pre-test qualitativa: ' + probLabel + '</div>' +
+    '<p class="note" style="margin-top:4px">Fattori maggiori selezionati: ' + majorCount + ' · Fattori minori selezionati: ' + minorCount + '</p>';
+
+  if(ambig){
+    if(level === 'severa'){
+      html += '<p class="note warn"><b>Quadro sintomatologico sfumato + probabilità pre-test alta:</b> orientarsi verso il trattamento empirico. La sicurezza relativa dell\'OTI in urgenza abbassa la soglia per il trattamento nei casi dubbi con esposizione a rischio significativa — il rischio di un trattamento non necessario è generalmente inferiore al rischio di MDD non trattata.</p>';
+    } else if(level === 'moderata'){
+      html += '<p class="note warn"><b>Quadro sintomatologico sfumato + probabilità pre-test moderata:</b> considerare il trattamento empirico se il quadro clinico complessivo è compatibile con MDD; coinvolgere il Diving Medical Officer per la decisione condivisa.</p>';
+    } else {
+      html += '<p class="note">Quadro sintomatologico sfumato ma pochi fattori di rischio: rivalutare diagnosi alternative (muscoloscheletrica, neurologica non correlata), senza escludere la MDD se il sospetto clinico persiste — in caso di dubbio persistente, il parere del Diving Medical Officer resta indicato.</p>';
+    }
+  } else {
+    html += '<p class="note">Il quadro sintomatologico è già indicato come chiaro: fare riferimento alla classificazione della checklist "Esame clinico" per la severità e la tabella di trattamento. Questa stima di probabilità resta un elemento di contesto, non sostituisce la classificazione sintomatologica.</p>';
+  }
+
+  diveOut.className = 'calc-out sev-' + level;
+  diveOut.innerHTML = html;
+}
+document.querySelectorAll('.dive-chk').forEach(function(c){ c.addEventListener('change', computeDive); });
+document.querySelectorAll('input[name="symptomClarity"]').forEach(function(r){ r.addEventListener('change', computeDive); });
 </script>
 
 </body>
