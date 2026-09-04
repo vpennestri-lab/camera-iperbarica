@@ -79,6 +79,7 @@
     <div class="tab" data-target="esame">Esame clinico<span class="sub">segni e sintomi</span></div>
     <div class="tab" data-target="strumentali">Esami pre-OTI<span class="sub">workup strumentale</span></div>
     <div class="tab" data-target="tabelle">Tabelle terapeutiche<span class="sub">US Navy · protocolli</span></div>
+    <div class="tab" data-target="documenti">Documenti<span class="sub">file da consultare e stampare</span></div>
   </div>
 </header>
 
@@ -431,7 +432,7 @@
           <text class="legend-text" x="286" y="304">Aria</text>
         </svg>
         </div>
-        <p class="note">Durata totale ~2h45min (165 min). Utilizzabile solo se un esame neurologico completo è stato eseguito ed è negativo, e se il Diving Medical Officer conferma l'assenza di segni neurologici. In caso di dubbio, o se l'esame neurologico non è stato possibile prima della ricompressione, <b>utilizzare comunque la Tabella 6</b>.</p>
+        <p class="note warn">Durata totale ~2h45min (165 min). Utilizzabile solo se un esame neurologico completo è stato eseguito ed è negativo, e se il Diving Medical Officer conferma l'assenza di segni neurologici. In caso di dubbio, o se l'esame neurologico non è stato possibile prima della ricompressione, <b>utilizzare comunque la Tabella 6</b>. <b>Durante il trattamento</b>, se i sintomi non si risolvono o peggiorano, passare senza esitazione alla Tabella 6.</p>
 
         <h3 class="sub-h">Tabella 6A — AGE o MDD con sintomi severi immediati</h3>
 
@@ -546,6 +547,36 @@
 
   </section>
 
+  <!-- ==================== DOCUMENTI ==================== -->
+  <section id="documenti" class="section">
+
+    <div class="card open">
+      <div class="card-head"><h2>Come usare questa scheda</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Documenti originali consultabili e scaricabili per stampa da tenere in reparto/camera iperbarica. Tocca il titolo per aprire il PDF nel browser (visualizzabile e stampabile direttamente), oppure tieni premuto/usa il menu del browser per salvarlo sul dispositivo.</p>
+      </div></div>
+    </div>
+
+    <div class="card open">
+      <div class="card-head"><h2>Tabelle e algoritmi ufficiali — US Navy Diving Manual</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Estratto originale del Capitolo 17 (Diagnosis and Treatment of Decompression Sickness and Arterial Gas Embolism), 14 pagine: i flowchart ufficiali per il trattamento di AGE/MDD grave (Fig. 17-1), MDD Tipo I (Fig. 17-2) e gestione delle recidive durante trattamento (Fig. 17-3), più i profili depth/time ufficiali delle Tabelle 5, 6, 6A, 4, 7 e 8 con specifiche esatte di durata, velocità di risalita e gas respirato.</p>
+        <p class="note"><a href="docs/Tabelle_e_algoritmi_diving_manual.pdf" target="_blank" rel="noopener"><b>📄 Apri "Tabelle e algoritmi diving manual" (PDF, 14 pagine)</b></a></p>
+        <p class="source">Fonte: U.S. Navy Diving Manual, Revision 7, Volume 5 — Diving Medicine and Recompression Chamber Operations, Naval Sea Systems Command. Opera del governo degli Stati Uniti, di dominio pubblico.</p>
+      </div></div>
+    </div>
+
+    <div class="card open">
+      <div class="card-head"><h2>Checklist esame neurologico — modulo ufficiale</h2><span class="chevron">▾</span></div>
+      <div class="card-body"><div class="card-body-inner">
+        <p class="note">Modulo ufficiale (Appendice 5A, 2 pagine) per l'esame neurologico completo: forza muscolare segmentaria arti superiori/inferiori, riflessi osteotendinei, esame sensitivo con diagramma corporeo per la localizzazione di deficit. È il documento di riferimento per la spunta "esame neurologico completo eseguito ed è negativo" usata nell'algoritmo della scheda "Esame clinico".</p>
+        <p class="note"><a href="docs/check_list_diving_manual.pdf" target="_blank" rel="noopener"><b>📄 Apri "Checklist esame neurologico" (PDF, 2 pagine)</b></a></p>
+        <p class="source">Fonte: U.S. Navy Diving Manual, Volume 5, Appendix 5A — Neurological Examination Checklist. Opera del governo degli Stati Uniti, di dominio pubblico.</p>
+      </div></div>
+    </div>
+
+  </section>
+
 </main>
 
 <footer>
@@ -646,7 +677,7 @@ function computeDCS(){
   } else if(negExam){
     level = 'moderata';
     html = '<div class="big">MDD Tipo I — lieve, esame neurologico negativo</div>' +
-      '<p class="note" style="margin-top:4px"><b>TABELLA TERAPEUTICA INDICATIVA:</b> US Navy Tabella 5 (TT5), solo previa conferma del Diving Medical Officer. Se durante il trattamento emergono anomalie neurologiche, passare a Tabella 6.</p>' +
+      '<p class="note warn" style="margin-top:4px"><b>TABELLA TERAPEUTICA INDICATIVA:</b> US Navy Tabella 5 (TT5), solo previa conferma del Diving Medical Officer. <b>Durante il trattamento</b>, se i sintomi non si risolvono o emergono anomalie neurologiche, passare senza esitazione alla Tabella 6.</p>' +
       '<p class="note"><b>TEMPISTICHE:</b> ricompressione appena possibile; un ritardo &gt;12h riduce comunque il tasso di risoluzione favorevole.</p>' +
       workup;
   } else {
